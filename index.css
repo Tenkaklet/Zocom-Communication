@@ -1,0 +1,36 @@
+@import url("semantic.min.css");
+@import url("./semantic/components/icon.css");
+
+body > .grid {
+	height: 100%;
+}
+.image {
+	margin-top: -100px;
+}
+.column {
+	max-width: 450px;
+}
+
+main {
+	display: flex;
+}
+
+#calendar {
+	height: 87vh;
+	width: 85vw;
+}
+
+aside {
+	width: 15vw;
+	text-align: center;
+}
+
+.time-between-dates {
+	position: relative;
+	top: 10px;
+	left: 10px;
+}
+
+#profile h1 {
+	margin-bottom: 10%;
+}
