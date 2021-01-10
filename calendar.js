@@ -36,10 +36,11 @@ $(() => {
 		}
 	});
 
-
+	// *** Retrieve all data associated wtih user
 	database.ref(`users/${user_uid}`).on('value', value => {
 		const data = value.val();
 		console.log(data);
+		console.log(snapshotToArray(value));
 	});
 
 	const profilePageBtn = document.querySelector('.profile-page');
@@ -57,6 +58,19 @@ $(() => {
 		});
 	});
 
+	// ** Firebase Data to Array
+	function snapshotToArray(snapshot) {
+		var returnArr = [];
+
+		snapshot.forEach(function (childSnapshot) {
+			var item = childSnapshot.val();
+			item.key = childSnapshot.key;
+
+			returnArr.push(item);
+		});
+
+		return returnArr;
+	};
 
 
 
