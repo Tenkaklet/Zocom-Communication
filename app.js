@@ -9,19 +9,6 @@ form.addEventListener('submit', e => {
 	firebase.auth().signInWithEmailAndPassword(email.value, password.value)
 		.then((user) => {
 			loading.classList.add('active');
-			const database = firebase.database();
-			database.ref('users/' + user.user.uid).once('value', snap => {
-				if (!snap.exists()) {
-					// Creates a new user in database
-					database.ref('users/' + user.user.uid).set({
-						username: null,
-						email: email.value,
-						profile_picture: null,
-						courses: []
-					});
-				}
-			});
-
 			localStorage.setItem('user_uid', user.user.uid);
 			setTimeout(() => {
 				window.location.href = 'calendar.html';
