@@ -138,16 +138,16 @@ $(() => {
 		e.preventDefault();
 		console.log(courseTitle.value, courseDescription.value, moment(new Date(courseStartDate.value)).format(), moment(new Date(courseEndDate.value)).format(), typeOfCourse.value, addDayCheckbox.checked);
 
-		// database.ref(`users/${user_uid}`).push({
-		// 	id: courseTitle.value.toLowerCase().replace(/\s/g, ''),
-		// 	calendarId: courseTitle.value.toLowerCase().replace(/\s/g, ''),
-		// 	title: courseTitle.value,
-		// 	start: moment(new Date(courseStartDate.value)).format(),
-		// 	end: moment(new Date(courseEndDate.value)).format(),
-		// 	body: courseDescription.value,
-		// 	category: 'time',
-		// 	isAllDay: addDayCheckbox.checked
-		// });
+		database.ref(`users/${user_uid}`).push({
+			id: courseTitle.value.toLowerCase().replace(/\s/g, ''),
+			calendarId: courseTitle.value.toLowerCase().replace(/\s/g, ''),
+			title: courseTitle.value,
+			start: moment(new Date(courseStartDate.value)).format(),
+			end: moment(new Date(courseEndDate.value)).format(),
+			body: courseDescription.value,
+			category: 'time',
+			isAllDay: addDayCheckbox.checked
+		});
 
 
 
