@@ -41,6 +41,8 @@ $(() => {
 		const data = value.val();
 		console.log(data);
 		console.log(snapshotToArray(value));
+		// TODO: here it creates a duplicate value of the first item in array. (could a posssible page refresh fix this?)
+		cal.createSchedules(snapshotToArray(value));
 	});
 
 	const profilePageBtn = document.querySelector('.profile-page');
