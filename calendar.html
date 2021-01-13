@@ -75,9 +75,10 @@
 		</div>
 	</nav>
 	<main>
-		<aside>
+		<aside id="my-courses">
 			<h4 class="ui header">My Courses</h4>
 			<ul class="ui link list courses">
+					<button class="ui mini secondary basic button add-course">Add Course</button>
 				<a class="active item">Home</a>
 				<a class="item">About</a>
 				<a class="item">Jobs</a>
@@ -88,7 +89,11 @@
 	</main>
 
 	<!-- Modals -->
+
+
+	<!-- Create Calendar Course -->
 	<div class="ui modal create-calendar">
+		<i class="close icon"></i>
 		<div class="header">Create a Course</div>
 		<div class="content">
 			<form class="ui form" id="course-form">
@@ -122,6 +127,36 @@
 						<label>All Day</label>
 					</div>
 				</div>
+				<div class="actions">
+					<button class="ui button" type="submit">Create Course</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<!-- Create Course Modal -->
+	<div class="ui modal create-school">
+		<i class="close icon"></i>
+		<div class="header">Create School</div>
+		<div class="content">
+			<form class="ui form" id="add-school-form">
+				<div class="field">
+					<label>School Name</label>
+					<input type="text" id="school-title" placeholder="Course Name">
+				</div>
+				<div class="field">
+					<label>Description</label>
+					<textarea id="school-description" rows="2"></textarea>
+				</div>
+				<!-- <div class="field">
+					<label>Type of Course</label>
+					<select class="ui dropdown" id="type-of-course">
+						<option value="">Type of Course</option>
+						<option value="frontend">Frontend</option>
+						<option value="backend">Backend</option>
+					</select>
+				</div> -->
 				<div class="actions">
 					<button class="ui button" type="submit">Create Course</button>
 				</div>

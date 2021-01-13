@@ -3,6 +3,10 @@ $(() => {
 	$('.new-cal-btn').on('click', () => {
 		$('.ui.modal.create-calendar').modal('show');
 	});
+
+	$('.add-course').on('click', () => {
+		$('.ui.modal.create-school').modal('show');
+	})
 	$('.ui.checkbox').checkbox();
 
 
@@ -149,6 +153,21 @@ $(() => {
 	const courseEndDate = document.querySelector('#course-end-date');
 	const typeOfCourse = document.querySelector('#type-of-course');
 	const addDayCheckbox = document.querySelector('#check-all-day');
+	const schoolTitle = document.querySelector('#school-title');
+	const schoolDescription = document.querySelector('#school-description');
+	// ** this form is to create a course with firebase
+	const addSchoolForm = document.querySelector('#add-school-form');
+
+	// ** This form makes a new course to the database
+	addSchoolForm.addEventListener('submit', e => {
+		e.preventDefault();
+		database.ref(`users/${user_uid}/${schoolTitle.value}`).set({
+			calendarId: schoolTitle.value.toLowerCase().replace(/\s/g, ''),
+			description: schoolDescription.value
+		});
+		$('.ui.modal.create-school').modal('hide');
+		alert(`${schoolTitle.value} Added!`);
+	});
 
 	courseForm.addEventListener('submit', e => {
 		e.preventDefault();
