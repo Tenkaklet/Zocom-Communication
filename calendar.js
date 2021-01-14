@@ -9,6 +9,20 @@ $(() => {
 	})
 	$('.ui.checkbox').checkbox();
 
+	$('.ui.form#add-school-form')
+		.form({
+			fields: {
+				"school-title": 'empty',
+				"school-description": 'empty',
+			}
+	});
+
+	if($('.courses').length === 0) {
+		const notification = document.createElement('p');
+		notification.innerHTML = 'Add a school!';
+		$('.courses').html(notification);
+	}
+
 
 	// * Declaring Calendar
 	var Calendar = tui.Calendar;
@@ -40,13 +54,16 @@ $(() => {
 		}
 	});
 
-	// *** Retrieve all data associated wtih user
-	database.ref(`users/${user_uid}`).on('value', value => {
-		const data = value.val();
-		console.log(data);
-		console.log(snapshotToArray(value));
-		// TODO: here it creates a duplicate value of the first item in array. (could a posssible page refresh fix this?)
-		cal.createSchedules(snapshotToArray(value));
+	// *** Retrieve all data (schools) associated wtih user
+	database.ref(`users/${user_uid}`).on('value', school => {
+		// const data = school.val();
+		const schools = snapshotToArray(school);
+		schools.map(value => {
+			console.log(value);
+			const schoolTemplate = `<a class="item" data-calendar="${value.calendarId}">${value.title}</a>`
+			$('.courses').append(schoolTemplate);
+		});
+
 	});
 
 	const profilePageBtn = document.querySelector('.profile-page');
@@ -161,12 +178,21 @@ $(() => {
 	// ** This form makes a new course to the database
 	addSchoolForm.addEventListener('submit', e => {
 		e.preventDefault();
-		database.ref(`users/${user_uid}/${schoolTitle.value}`).set({
-			calendarId: schoolTitle.value.toLowerCase().replace(/\s/g, ''),
-			description: schoolDescription.value
-		});
-		$('.ui.modal.create-school').modal('hide');
-		alert(`${schoolTitle.value} Added!`);
+
+		if ($('.ui.form#add-school-form').form('is valid')) {
+
+			database.ref(`users/${user_uid}/${schoolTitle.value}`).set({
+				calendarId: schoolTitle.value.toLowerCase().replace(/\s/g, ''),
+				description: schoolDescription.value,
+				title: schoolTitle.value
+			});
+
+			$('.ui.modal.create-school').modal('hide');
+			alert(`${schoolTitle.value} Added!`);
+
+		}
+
+
 	});
 
 	courseForm.addEventListener('submit', e => {
