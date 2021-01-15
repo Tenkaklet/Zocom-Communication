@@ -208,6 +208,7 @@ $(() => {
 
 			$('.ui.modal.create-school').modal('hide');
 			alert(`${schoolTitle.value} Added!`);
+			// FIXME: this should be async
 			location.reload();
 
 		}
