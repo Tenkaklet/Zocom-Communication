@@ -15,11 +15,11 @@ $(() => {
 				"school-title": 'empty',
 				"school-description": 'empty',
 			}
-	});
+		});
 
-	if($('.courses').length === 0) {
+	if ($('.courses').length === 0) {
 		const notification = document.createElement('p');
-		notification.innerHTML = 'Add a school!';
+		notification.innerText = 'Add a school!';
 		$('.courses').html(notification);
 	}
 
@@ -56,14 +56,31 @@ $(() => {
 
 	// *** Retrieve all data (schools) associated wtih user
 	database.ref(`users/${user_uid}`).on('value', school => {
-		// const data = school.val();
-		const schools = snapshotToArray(school);
-		schools.map(value => {
-			console.log(value);
-			const schoolTemplate = `<a class="item" data-calendar="${value.calendarId}">${value.title}</a>`
-			$('.courses').append(schoolTemplate);
-		});
+		const data = school.val();
 
+		const x = Object.keys(data).reduce((res, key) => {
+			return res.concat(data[key])
+		}, []);
+
+		console.log(x);
+
+		// const schools = snapshotToArray(school);
+		x.forEach(value => {
+			// console.log(value);
+			const schoolList = `
+				<div class="item">
+				<i class="dropdown icon"></i>
+				<span class="text">${value.title}</span>
+				<div class="right menu">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+				</div>
+			</div>
+			`;
+			const schoolTemplate = `<a class="item" data-calendar="${value.calendarId}">${value.title}</a>`
+			$('.courses').append(schoolList);
+		});
 	});
 
 	const profilePageBtn = document.querySelector('.profile-page');
@@ -94,6 +111,8 @@ $(() => {
 
 		return returnArr;
 	};
+
+	// Here  if you click on the link it should show classes related to that
 
 
 
@@ -221,7 +240,7 @@ $(() => {
 		// 	end: moment(new Date(courseEndDate.value)).format(),
 		// 	body: courseDescription.value,
 		// 	category: 'time',
-		// 	// isAllDay: true
+		// 	name: 'POST'
 		// }
 		// ]);
 
