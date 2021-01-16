@@ -55,7 +55,7 @@ $(() => {
 	});
 
 	// *** Retrieve all data (schools) associated wtih user
-	database.ref(`users/${user_uid}`).on('value', school => {
+	database.ref(`users/${user_uid}`).once('value', school => {
 		const data = school.val();
 
 		const x = Object.keys(data).reduce((res, key) => {
