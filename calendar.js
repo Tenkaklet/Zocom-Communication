@@ -27,95 +27,6 @@ $(() => {
 	// * Declaring Calendar
 	var Calendar = tui.Calendar;
 
-	// ** Initilazing Calendar
-	var cal = new Calendar('#calendar', {
-		defaultView: 'month',
-		taskView: true,
-		template: templates,
-		useCreationPopup: true,
-		useDetailPopup: true,
-		scheduleView: true,
-		month: {
-			workweek: true
-		}
-	});
-
-	// localstorage of user Id:
-	const user_uid = localStorage.getItem('user_uid');
-	// retrieve database information
-	const database = firebase.database();
-
-	firebase.auth().onAuthStateChanged((user) => {
-		if (user) {
-			// user is signed in...
-			var uid = user.uid;
-		} else {
-			window.location.href = 'index.html';
-		}
-	});
-
-	// *** Retrieve all data (schools) associated wtih user
-	database.ref(`users/${user_uid}`).once('value', school => {
-		const data = school.val();
-
-		const x = Object.keys(data).reduce((res, key) => {
-			return res.concat(data[key])
-		}, []);
-
-		console.log(x);
-
-		// const schools = snapshotToArray(school);
-		x.forEach(value => {
-			// console.log(value);
-			const schoolList = `
-				<div class="item">
-				<i class="dropdown icon"></i>
-				<span class="text">${value.title}</span>
-				<div class="right menu">
-				<div class="item">1</div>
-				<div class="item">2</div>
-				<div class="item">3</div>
-				</div>
-			</div>
-			`;
-			const schoolTemplate = `<a class="item" data-calendar="${value.calendarId}">${value.title}</a>`
-			$('.courses').append(schoolList);
-		});
-	});
-
-	const profilePageBtn = document.querySelector('.profile-page');
-	profilePageBtn.addEventListener('click', () => {
-		window.location.href = 'profile.html';
-	});
-
-	const logoutBtn = document.querySelector('.logout');
-	logoutBtn.addEventListener('click', e => {
-		firebase.auth().signOut().then(() => {
-			localStorage.clear();
-			window.location.href = 'index.html';
-		}).catch((error) => {
-			// An error happened.
-		});
-	});
-
-	// ** Firebase Data to Array
-	function snapshotToArray(snapshot) {
-		var returnArr = [];
-
-		snapshot.forEach(function (childSnapshot) {
-			var item = childSnapshot.val();
-			item.key = childSnapshot.key;
-
-			returnArr.push(item);
-		});
-
-		return returnArr;
-	};
-
-	// Here  if you click on the link it should show classes related to that
-
-
-
 	// register templates
 	var templates = {
 		popupIsAllDay: function () {
@@ -131,7 +42,7 @@ $(() => {
 			return 'Subject';
 		},
 		locationPlaceholder: function () {
-			return 'Location';
+			return 'School';
 		},
 		startDatePlaceholder: function () {
 			return 'Start date';
@@ -177,6 +88,107 @@ $(() => {
 			return 'Delete';
 		}
 	};
+
+	// ** Initilazing Calendar
+	var cal = new Calendar('#calendar', {
+		defaultView: 'month',
+		taskView: true,
+		template: templates,
+		useCreationPopup: true,
+		useDetailPopup: true,
+		scheduleView: true,
+		month: {
+			workweek: true
+		}
+	});
+
+	// localstorage of user Id:
+	const user_uid = localStorage.getItem('user_uid');
+	// retrieve database information
+	const database = firebase.database();
+
+	firebase.auth().onAuthStateChanged((user) => {
+		if (user) {
+			// user is signed in...
+			var uid = user.uid;
+		} else {
+			window.location.href = 'index.html';
+		}
+	});
+
+	// *** Retrieve all data (schools) associated wtih user
+	database.ref(`users/${user_uid}`).once('value', school => {
+		const data = school.val();
+
+		const x = Object.keys(data).reduce((res, key) => {
+			return res.concat(data[key])
+		}, []);
+
+		console.log(x);
+
+		// const schools = snapshotToArray(school);
+		x.forEach(value => {
+			const schoolList = `
+				<div class="item">
+				<i class="dropdown icon"></i>
+				<span class="text">${value.title}</span>
+				<div class="right menu">
+				<div class="item view-calendar" data-calendar="${value.title}">View</div>
+				<div class="item delete-calendar" data-calendar="${value.title}">Delete</div>
+				</div>
+			</div>
+			`;
+
+			$('.courses').append(schoolList);
+		});
+
+		// *** View Calendar button
+		document.querySelectorAll('.view-calendar').forEach(element => {
+			element.addEventListener('click', e => {
+				console.log(e.target.dataset.calendar);
+				const school = e.target.dataset.calendar;
+				database.ref(`users/${user_uid}/${school}`).once('value', value => {
+					console.log(value.val());
+					const data = value.val();
+					$('.course-list').html(data.description);
+				});
+			});
+		});
+	});
+
+	const profilePageBtn = document.querySelector('.profile-page');
+	profilePageBtn.addEventListener('click', () => {
+		window.location.href = 'profile.html';
+	});
+
+	const logoutBtn = document.querySelector('.logout');
+	logoutBtn.addEventListener('click', e => {
+		firebase.auth().signOut().then(() => {
+			localStorage.clear();
+			window.location.href = 'index.html';
+		}).catch((error) => {
+			// An error happened.
+		});
+	});
+
+	// ** Firebase Data to Array
+	function snapshotToArray(snapshot) {
+		var returnArr = [];
+
+		snapshot.forEach(function (childSnapshot) {
+			var item = childSnapshot.val();
+			item.key = childSnapshot.key;
+
+			returnArr.push(item);
+		});
+
+		return returnArr;
+	};
+
+
+
+
+
 
 
 	const todayBtn = document.querySelector('.today');

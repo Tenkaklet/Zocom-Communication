@@ -34,3 +34,8 @@ aside {
 #profile h1 {
 	margin-bottom: 10%;
 }
+
+.ui.button.add-course {
+	display: block;
+	margin: 1rem auto;
+}
