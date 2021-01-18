@@ -1,8 +1,10 @@
 $(() => {
 	$('.ui.dropdown').dropdown();
-	$('.new-cal-btn').on('click', () => {
-		$('.ui.modal.create-calendar').modal('show');
-	});
+
+	// *** the below code will cause the modal to open. Will fix it!
+	// $('.new-cal-btn').on('click', () => {
+	// 	$('.ui.modal.create-calendar').modal('show');
+	// });
 
 	$('.add-course').on('click', () => {
 		$('.ui.modal.create-school').modal('show');
@@ -94,13 +96,25 @@ $(() => {
 		defaultView: 'month',
 		taskView: true,
 		template: templates,
-		useCreationPopup: true,
-		useDetailPopup: true,
+		// useCreationPopup: true,
+		// useDetailPopup: true,
 		scheduleView: true,
 		month: {
 			workweek: true
 		}
 	});
+
+	cal.on({
+		'beforeCreateSchedule': function(e) {
+			console.log('beforeCreateSchedule', e);
+			// open a creation popup
+			$('.ui.modal.create-calendar').modal('show');
+			// If you dont' want to show any popup, just use `e.guide.clearGuideElement()`
+
+			// then close guide element(blue box from dragging or clicking days)
+			e.guide.clearGuideElement();
+		}
+	})
 
 	// localstorage of user Id:
 	const user_uid = localStorage.getItem('user_uid');
@@ -151,6 +165,7 @@ $(() => {
 					console.log(value.val());
 					const data = value.val();
 					$('.course-list').html(data.description);
+					localStorage.setItem('selected_school', data.title);
 				});
 			});
 		});
