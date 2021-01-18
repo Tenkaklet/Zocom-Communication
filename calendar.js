@@ -42,7 +42,7 @@ $(() => {
 			return 'Subject';
 		},
 		locationPlaceholder: function () {
-			return 'School';
+			return 'Location';
 		},
 		startDatePlaceholder: function () {
 			return 'Start date';
