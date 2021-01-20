@@ -96,8 +96,7 @@ $(() => {
 		defaultView: 'month',
 		taskView: true,
 		template: templates,
-		// useCreationPopup: true,
-		// useDetailPopup: true,
+		useDetailPopup: true,
 		scheduleView: true,
 		month: {
 			workweek: true
@@ -105,16 +104,19 @@ $(() => {
 	});
 
 	cal.on({
-		'beforeCreateSchedule': function(e) {
+		'beforeCreateSchedule': function (e) {
 			console.log('beforeCreateSchedule', e);
 			// open a creation popup
 			$('.ui.modal.create-calendar').modal('show');
-			// If you dont' want to show any popup, just use `e.guide.clearGuideElement()`
-
+			// here it gets the details from firebase
 			// then close guide element(blue box from dragging or clicking days)
 			e.guide.clearGuideElement();
 		}
-	})
+	});
+
+	cal.on('clickSchedule', event => {
+		console.log(event);
+	});
 
 	// localstorage of user Id:
 	const user_uid = localStorage.getItem('user_uid');
@@ -143,7 +145,7 @@ $(() => {
 		// const schools = snapshotToArray(school);
 		x.forEach(value => {
 			const schoolList = `
-				<div class="item">
+			<div class="item">
 				<i class="dropdown icon"></i>
 				<span class="text">${value.title}</span>
 				<div class="right menu">
@@ -154,22 +156,45 @@ $(() => {
 			`;
 
 			$('.courses').append(schoolList);
+			$('#school-dropdown').append(new Option(value.title, value.title));
 		});
 
 		// *** View Calendar button
 		document.querySelectorAll('.view-calendar').forEach(element => {
 			element.addEventListener('click', e => {
-				console.log(e.target.dataset.calendar);
 				const school = e.target.dataset.calendar;
 				database.ref(`users/${user_uid}/${school}`).once('value', value => {
 					console.log(value.val());
 					const data = value.val();
 					$('.course-list').html(data.description);
 					localStorage.setItem('selected_school', data.title);
+					localStorage.setItem('calendarId', data.calendarId); //? this could be redundant.
+					const course = data.title;
+					showCalendar(course);
 				});
 			});
 		});
 	});
+
+	const showCalendar = course => {
+		database.ref(`users/${user_uid}/${course}/calendars`).once('value', value => {
+			const calendar = snapshotToArray(value);
+			console.log(calendar);
+			calendar.map(value => {
+				cal.createSchedules([
+					{
+						id: value.id,
+						calendarId: value.calendarId,
+						title: value.title,
+						start: moment(new Date(value.start)).format(),
+						end: moment(new Date(value.end)).format(),
+						body: value.body,
+						category: value.category,
+					}
+				]);
+			});
+		});
+	};
 
 	const profilePageBtn = document.querySelector('.profile-page');
 	profilePageBtn.addEventListener('click', () => {
@@ -189,14 +214,11 @@ $(() => {
 	// ** Firebase Data to Array
 	function snapshotToArray(snapshot) {
 		var returnArr = [];
-
 		snapshot.forEach(function (childSnapshot) {
 			var item = childSnapshot.val();
 			item.key = childSnapshot.key;
-
 			returnArr.push(item);
 		});
-
 		return returnArr;
 	};
 
@@ -214,14 +236,14 @@ $(() => {
 	const courseDescription = document.querySelector('#course-description');
 	const courseStartDate = document.querySelector('#course-start-date');
 	const courseEndDate = document.querySelector('#course-end-date');
-	const typeOfCourse = document.querySelector('#type-of-course');
 	const addDayCheckbox = document.querySelector('#check-all-day');
 	const schoolTitle = document.querySelector('#school-title');
 	const schoolDescription = document.querySelector('#school-description');
 	// ** this form is to create a course with firebase
 	const addSchoolForm = document.querySelector('#add-school-form');
+	const schoolDropDown = document.querySelector('#school-dropdown');
 
-	// ** This form makes a new course to the database
+	// *** This form makes a new course to the database
 	addSchoolForm.addEventListener('submit', e => {
 		e.preventDefault();
 
@@ -239,39 +261,26 @@ $(() => {
 			location.reload();
 
 		}
-
-
 	});
 
 	courseForm.addEventListener('submit', e => {
 		e.preventDefault();
-		console.log(courseTitle.value, courseDescription.value, moment(new Date(courseStartDate.value)).format(), moment(new Date(courseEndDate.value)).format(), typeOfCourse.value, addDayCheckbox.checked);
+		console.log(courseTitle.value, courseDescription.value, moment(new Date(courseStartDate.value)).format(), schoolDropDown.value, moment(new Date(courseEndDate.value)).format(), addDayCheckbox.checked);
 
-		database.ref(`users/${user_uid}`).push({
+		database.ref(`users/${user_uid}/${schoolDropDown.value}/calendars`).push({
 			id: courseTitle.value.toLowerCase().replace(/\s/g, ''),
-			calendarId: courseTitle.value.toLowerCase().replace(/\s/g, ''),
+			calendarId: schoolDropDown.value.toLowerCase().replace(/\s/g, ''),
 			title: courseTitle.value,
 			start: moment(new Date(courseStartDate.value)).format(),
 			end: moment(new Date(courseEndDate.value)).format(),
 			body: courseDescription.value,
 			category: 'time',
-			isAllDay: addDayCheckbox.checked
+			isAllDay: addDayCheckbox.checked,
 		});
 
 
 
-		// cal.createSchedules([
-		// {
-		// 	id: '3',
-		// 	calendarId: '1',
-		// 	title: courseTitle.value,
-		// 	start: moment(new Date(courseStartDate.value)).format(),
-		// 	end: moment(new Date(courseEndDate.value)).format(),
-		// 	body: courseDescription.value,
-		// 	category: 'time',
-		// 	name: 'POST'
-		// }
-		// ]);
+
 
 		$('.ui.modal.create-calendar').modal('hide');
 

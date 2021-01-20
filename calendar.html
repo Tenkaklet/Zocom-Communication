@@ -84,7 +84,7 @@
 				<div class="menu courses">
 					<!-- Here list of courses will be displayed in a dropdown -->
 				</div>
-			  </div>
+			</div>
 			<ul class="ui link list course-list">
 				<!-- Here shows the information about the School. -->
 			</ul>
@@ -103,6 +103,12 @@
 		<div class="content">
 			<form class="ui form" id="course-form">
 				<div class="field">
+					<label>School Name</label>
+					<select class="ui dropdown" id="school-dropdown">
+
+					</select>
+				</div>
+				<div class="field">
 					<label>Course Name</label>
 					<input type="text" id="course-title" placeholder="Course Name">
 				</div>
@@ -117,14 +123,6 @@
 				<div class="field">
 					<label>End Date</label>
 					<input type="date" id="course-end-date">
-				</div>
-				<div class="field">
-					<label>Type of Course</label>
-					<select multiple="" class="ui dropdown" id="type-of-course">
-						<option value="">Type of Course</option>
-						<option value="frontend">Frontend</option>
-						<option value="backend">Backend</option>
-					</select>
 				</div>
 				<div class="inline field">
 					<div class="ui toggle checkbox">
@@ -207,11 +205,11 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
 		integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
 		crossorigin="anonymous"></script>
-		<script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.js"></script>
-		<script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.js"></script>
-		<script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
-		<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
-		<script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
+	<script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.js"></script>
+	<script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.js"></script>
+	<script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
+	<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
+	<script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
 		integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw=="
 		crossorigin="anonymous"></script>
