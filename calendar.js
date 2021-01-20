@@ -118,6 +118,13 @@ $(() => {
 		console.log(event);
 	});
 
+	cal.on('afterRenderSchedule', function(event) {
+		var schedule = event.schedule;
+		var element = cal.getElement(schedule.id, schedule.calendarId);
+		// use the element
+		console.log(element);
+	});
+
 	// localstorage of user Id:
 	const user_uid = localStorage.getItem('user_uid');
 	// retrieve database information
@@ -180,19 +187,12 @@ $(() => {
 		database.ref(`users/${user_uid}/${course}/calendars`).once('value', value => {
 			const calendar = snapshotToArray(value);
 			console.log(calendar);
-			calendar.map(value => {
-				cal.createSchedules([
-					{
-						id: value.id,
-						calendarId: value.calendarId,
-						title: value.title,
-						start: moment(new Date(value.start)).format(),
-						end: moment(new Date(value.end)).format(),
-						body: value.body,
-						category: value.category,
-					}
-				]);
-			});
+			// FIXME: render only the selected calendars, now they are showing all of them from all db instances.
+			cal.clear();
+
+
+			cal.createSchedules(calendar, true);
+			cal.render();
 		});
 	};
 
