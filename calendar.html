@@ -10,6 +10,11 @@
 	<!-- If you use the default popups, use this. -->
 	<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 	<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css" rel="stylesheet" type="text/css" />
+	<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.js"></script>
+	<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
 	<link rel="stylesheet" href="index.css">
 </head>
 
@@ -118,7 +123,12 @@
 				</div>
 				<div class="field">
 					<label>Start Date</label>
-					<input type="date" id="course-start-date">
+					<div class="ui calendar" id="course-start-date">
+						<div class="ui input left icon">
+							<i class="calendar icon"></i>
+							<input type="text" placeholder="Date/Time">
+						</div>
+					</div>
 				</div>
 				<div class="field">
 					<label>End Date</label>
@@ -198,9 +208,6 @@
 		firebase.analytics();
 	</script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-		integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-		crossorigin="anonymous"></script>
 	<script src="./semantic/components/form.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
 		integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
@@ -210,10 +217,6 @@
 	<script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
 	<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
 	<script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
-		integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw=="
-		crossorigin="anonymous"></script>
-	<!-- <script src="timezone.js"></script> -->
 	<script src="calendar.js"></script>
 </body>
 

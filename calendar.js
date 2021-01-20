@@ -2,9 +2,7 @@ $(() => {
 	$('.ui.dropdown').dropdown();
 
 	// *** the below code will cause the modal to open. Will fix it!
-	// $('.new-cal-btn').on('click', () => {
-	// 	$('.ui.modal.create-calendar').modal('show');
-	// });
+
 
 	$('.add-course').on('click', () => {
 		$('.ui.modal.create-school').modal('show');
@@ -108,6 +106,7 @@ $(() => {
 			console.log('beforeCreateSchedule', e);
 			// open a creation popup
 			$('.ui.modal.create-calendar').modal('show');
+			$('#course-start-date').calendar();
 			// here it gets the details from firebase
 			// then close guide element(blue box from dragging or clicking days)
 			e.guide.clearGuideElement();
@@ -118,12 +117,7 @@ $(() => {
 		console.log(event);
 	});
 
-	cal.on('afterRenderSchedule', function(event) {
-		var schedule = event.schedule;
-		var element = cal.getElement(schedule.id, schedule.calendarId);
-		// use the element
-		console.log(element);
-	});
+
 
 	// localstorage of user Id:
 	const user_uid = localStorage.getItem('user_uid');
@@ -241,6 +235,9 @@ $(() => {
 	const addSchoolForm = document.querySelector('#add-school-form');
 	const schoolDropDown = document.querySelector('#school-dropdown');
 
+
+
+
 	// *** This form makes a new course to the database
 	addSchoolForm.addEventListener('submit', e => {
 		e.preventDefault();
@@ -264,12 +261,14 @@ $(() => {
 	courseForm.addEventListener('submit', e => {
 		e.preventDefault();
 		console.log(courseTitle.value, courseDescription.value, moment(new Date(courseStartDate.value)).format(), schoolDropDown.value, moment(new Date(courseEndDate.value)).format(), addDayCheckbox.checked);
+		
+
 
 		database.ref(`users/${user_uid}/${schoolDropDown.value}/calendars`).push({
 			id: courseTitle.value.toLowerCase().replace(/\s/g, ''),
 			calendarId: schoolDropDown.value.toLowerCase().replace(/\s/g, ''),
 			title: courseTitle.value,
-			start: moment(new Date(courseStartDate.value)).format(),
+			start: moment($('#course-start-date').calendar('get date')).format(),
 			end: moment(new Date(courseEndDate.value)).format(),
 			body: courseDescription.value,
 			category: 'time',
@@ -277,7 +276,12 @@ $(() => {
 		});
 
 
-
+		courseTitle.value = '';
+		courseDescription.value = '';
+		courseStartDate.value = '';
+		schoolDropDown.value = '';
+		courseEndDate.value = '';
+		addDayCheckbox.checked = '';
 
 
 		$('.ui.modal.create-calendar').modal('hide');
