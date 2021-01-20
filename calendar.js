@@ -186,8 +186,6 @@ $(() => {
 	const showCalendar = course => {
 		database.ref(`users/${user_uid}/${course}/calendars`).once('value', value => {
 			const calendar = snapshotToArray(value);
-			console.log(calendar);
-			// FIXME: render only the selected calendars, now they are showing all of them from all db instances.
 			cal.clear();
 
 
