@@ -20,48 +20,7 @@
 
 <body class="calendar">
 	<nav class="ui secondary menu">
-		<a class="item">
-			<div class="ui dropdown">
-				<div class="text">Courses</div>
-				<i class="dropdown icon"></i>
-				<div class="menu">
-					<div class="item new-cal-btn">New</div>
-					<div class="item">
-						Search
-					</div>
-					<div class="item">Make a copy</div>
-					<div class="item">
-						<i class="folder icon"></i>
-						Move to folder
-					</div>
-					<div class="item">
-						<i class="trash icon"></i>
-						Move to trash
-					</div>
-					<div class="divider"></div>
-					<div class="item">Download As...</div>
-					<div class="item">
-						<i class="dropdown icon"></i>
-						Publish To Web
-						<div class="menu">
-							<div class="item">Google Docs</div>
-							<div class="item">Google Drive</div>
-							<div class="item">Dropbox</div>
-							<div class="item">Adobe Creative Cloud</div>
-							<div class="item">Private FTP</div>
-							<div class="item">Another Service...</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</a>
 		<div class="right menu">
-			<!-- <div class="item">
-				<div class="ui icon input">
-					<input type="text" placeholder="Search...">
-					<i class="search link icon"></i>
-				</div>
-			</div> -->
 			<a class="item profile-page">
 				Profile
 			</a>
@@ -78,6 +37,9 @@
 			<span class="time-span previous"></span> -
 			<span class="time-span next"></span>
 		</div>
+		<a href="#" class="item month-view">Month</a>
+		<a href="#" class="item week-view">Week</a>
+		<a href="#" class="item day-view">Day</a>
 	</nav>
 	<main>
 		<aside id="my-courses">
@@ -132,7 +94,12 @@
 				</div>
 				<div class="field">
 					<label>End Date</label>
-					<input type="date" id="course-end-date">
+					<div class="ui calendar" id="course-end-date">
+						<div class="ui input left icon">
+							<i class="calendar icon"></i>
+							<input type="text" placeholder="Date/Time">
+						</div>
+					</div>
 				</div>
 				<div class="inline field">
 					<div class="ui toggle checkbox">
@@ -143,6 +110,7 @@
 				<div class="actions">
 					<button class="ui button" type="submit">Create Course</button>
 				</div>
+				<div class="ui error message"></div>
 			</form>
 		</div>
 	</div>

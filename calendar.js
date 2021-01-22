@@ -107,6 +107,7 @@ $(() => {
 			// open a creation popup
 			$('.ui.modal.create-calendar').modal('show');
 			$('#course-start-date').calendar();
+			$('#course-end-date').calendar();
 			// here it gets the details from firebase
 			// then close guide element(blue box from dragging or clicking days)
 			e.guide.clearGuideElement();
@@ -261,30 +262,45 @@ $(() => {
 	courseForm.addEventListener('submit', e => {
 		e.preventDefault();
 		console.log(courseTitle.value, courseDescription.value, moment(new Date(courseStartDate.value)).format(), schoolDropDown.value, moment(new Date(courseEndDate.value)).format(), addDayCheckbox.checked);
-		
+
+		$('.ui.form#course-form')
+			.form({
+				fields: {
+					"school-dropdown": 'empty',
+					"course-title": 'empty',
+					"course-description": 'empty',
+					"course-start-date": 'empty',
+					"course-end-date": 'empty',
+
+				}
+			});
+		if ($('.ui.form#course-form').form('is valid')) {
+			console.log('Ok');
+			database.ref(`users/${user_uid}/${schoolDropDown.value}/calendars`).push({
+				id: courseTitle.value.toLowerCase().replace(/\s/g, ''),
+				calendarId: schoolDropDown.value.toLowerCase().replace(/\s/g, ''),
+				title: courseTitle.value,
+				start: moment($('#course-start-date').calendar('get date')).format(),
+				end: moment($('#course-end-date').calendar('get date')).format(),
+				body: courseDescription.value,
+				category: 'time',
+				isAllDay: addDayCheckbox.checked,
+			});
 
 
-		database.ref(`users/${user_uid}/${schoolDropDown.value}/calendars`).push({
-			id: courseTitle.value.toLowerCase().replace(/\s/g, ''),
-			calendarId: schoolDropDown.value.toLowerCase().replace(/\s/g, ''),
-			title: courseTitle.value,
-			start: moment($('#course-start-date').calendar('get date')).format(),
-			end: moment(new Date(courseEndDate.value)).format(),
-			body: courseDescription.value,
-			category: 'time',
-			isAllDay: addDayCheckbox.checked,
-		});
+			courseTitle.value = '';
+			courseDescription.value = '';
+			courseStartDate.value = '';
+			schoolDropDown.value = '';
+			courseEndDate.value = '';
+			addDayCheckbox.checked = '';
 
 
-		courseTitle.value = '';
-		courseDescription.value = '';
-		courseStartDate.value = '';
-		schoolDropDown.value = '';
-		courseEndDate.value = '';
-		addDayCheckbox.checked = '';
+			$('.ui.modal.create-calendar').modal('hide');
+		} else {
+			alert('Please fill in all fields');
+		}
 
-
-		$('.ui.modal.create-calendar').modal('hide');
 
 	});
 
@@ -308,6 +324,14 @@ $(() => {
 
 	document.querySelector('.time-span.previous').innerHTML = moment(cal.getDateRangeStart()._date).format('MMMM D YYYY');
 	document.querySelector('.time-span.next').innerHTML = moment(cal.getDateRangeEnd()._date).format('MMMM D YYYY');
+
+	const dayViewBtn = document.querySelector('.day-view');
+	const weekViewBtn = document.querySelector('.week-view');
+	const monthViewBtn = document.querySelector('.month-view');
+
+	dayViewBtn.addEventListener('click', () => {
+		cal.changeView('day', true);
+	});
 
 });
 
