@@ -333,5 +333,13 @@ $(() => {
 		cal.changeView('day', true);
 	});
 
+	weekViewBtn.addEventListener('click', () => {
+		cal.changeView('week', true);
+	});
+
+	monthViewBtn.addEventListener('click', () => {
+		cal.changeView('month', true);
+	});
+
 });
 
