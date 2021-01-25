@@ -149,9 +149,7 @@ $(() => {
 
 
 		for(let index in schedules) {
-			// console.log(schedules[index]);
 			const result = Object.values(schedules[index]);
-			// console.log(result);
 			allSchedules.push(...result);
 		}
 
