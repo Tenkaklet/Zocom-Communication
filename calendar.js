@@ -98,7 +98,7 @@ $(() => {
 		scheduleView: true,
 		month: {
 			workweek: true
-		}
+		},
 	});
 
 	cal.on({
@@ -141,10 +141,25 @@ $(() => {
 		const x = Object.keys(data).reduce((res, key) => {
 			return res.concat(data[key])
 		}, []);
+		const schedules = [];
+		const allSchedules = [];
+		x.forEach(value => {
+			schedules.push(value.calendars);
+		});
 
-		console.log(x);
 
-		// const schools = snapshotToArray(school);
+		for(let index in schedules) {
+			// console.log(schedules[index]);
+			const result = Object.values(schedules[index]);
+			// console.log(result);
+			allSchedules.push(...result);
+		}
+
+
+		cal.createSchedules(allSchedules, true);
+
+		cal.render();
+
 		x.forEach(value => {
 			const schoolList = `
 			<div class="item">
@@ -166,7 +181,6 @@ $(() => {
 			element.addEventListener('click', e => {
 				const school = e.target.dataset.calendar;
 				database.ref(`users/${user_uid}/${school}`).once('value', value => {
-					console.log(value.val());
 					const data = value.val();
 					$('.course-list').html(data.description);
 					localStorage.setItem('selected_school', data.title);
@@ -206,6 +220,7 @@ $(() => {
 
 	// ** Firebase Data to Array
 	function snapshotToArray(snapshot) {
+		console.log(snapshot);
 		var returnArr = [];
 		snapshot.forEach(function (childSnapshot) {
 			var item = childSnapshot.val();
@@ -261,8 +276,6 @@ $(() => {
 
 	courseForm.addEventListener('submit', e => {
 		e.preventDefault();
-		console.log(courseTitle.value, courseDescription.value, moment(new Date(courseStartDate.value)).format(), schoolDropDown.value, moment(new Date(courseEndDate.value)).format(), addDayCheckbox.checked);
-
 		$('.ui.form#course-form')
 			.form({
 				fields: {
