@@ -135,6 +135,22 @@ $(() => {
 	});
 
 	// *** Retrieve all data (schools) associated wtih user
+	fetch('http://localhost:3000/fetchCalendar', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ user_uid })
+	}).then(res => res.json())
+		.then(data => {
+			console.log(data);
+			cal.createSchedules(data, true);
+
+		cal.render();
+		})
+		.catch(err => {
+			console.log(err);
+		});
 	database.ref(`users/${user_uid}`).once('value', school => {
 		const data = school.val();
 
@@ -148,15 +164,13 @@ $(() => {
 		});
 
 
-		for(let index in schedules) {
+		for (let index in schedules) {
 			const result = Object.values(schedules[index]);
 			allSchedules.push(...result);
 		}
 
 
-		cal.createSchedules(allSchedules, true);
 
-		cal.render();
 
 		x.forEach(value => {
 			const schoolList = `
